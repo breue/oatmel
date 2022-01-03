@@ -1,0 +1,38 @@
+<nav id="menu" class="menu">
+	<% if @current_user %>
+		<a onClick="slideout.toggle();window.location.href = '/profiles/<%= @current_user.pretty_slug %>';" style="color:#fff;font-size:22px;font-weight:700;cursor:pointer;">
+			<div class="medium" style='display:inline-block;background-image: url(<%= @current_user.img %>); width:90px; height:90px;margin-top:-15px;margin-bottom:-10px;'></div>
+		</a>
+	<% else %>
+		<%= google_auth_button proceed_to: create_login_url %>
+	<% end %>
+	<hr>
+	<% if @current_user %>
+		<a onClick="slideout.toggle();window.location.href = '/notifications';" style="color:#fff;font-size:22px;font-weight:700;cursor:pointer;"> 
+			<i class="fas fa-bell"></i> Notifications
+			<% if @current_user.unread_notifications > 0 %>
+			<% if @current_user.unread_notifications > 9 %>
+			<div style="display:block;margin-left:-6px;margin-top:-45px;margin-bottom:39px;">
+			<% else %>
+			<div style="display:block;margin-left:-2px;margin-top:-45px;margin-bottom:39px;">
+			<% end %>
+				<span class="badge badge-pill badge-danger" style="font-size:15px;z-index:600;"><%= @current_user.unread_notifications %></span></div>
+			<% end %>
+		</a>
+		<hr>
+	<% end %>
+	<a onClick="slideout.toggle();window.location.href = '/';" style="color:#fff;font-size:22px;font-weight:700;cursor:pointer;" style="color:#fff;font-size:22px;font-weight:700;"><i class="fas fa-search"></i> Discover</a>
+	<hr>
+	<a onClick="slideout.toggle();window.location.href = '/community';" style="color:#fff;font-size:22px;font-weight:700;cursor:pointer;"><i class="fas fa-comments"></i> Community</a>
+	<hr>
+	<% if @current_user %>
+		<a onClick="slideout.toggle();$('#newProductReview').modal('show');" style="color:#fff;font-size:22px;font-weight:700;cursor:pointer;"><i class="fas fa-utensil-spoon"></i> Review</a>
+		<hr>
+	<% else %>
+		<a onClick="slideout.toggle();$('#promptAuth').modal('show');" style="color:#fff;font-size:22px;font-weight:700;cursor:pointer;"><i class="fas fa-utensil-spoon"></i> Review</a>
+		<hr>
+	<% end %>
+	<a onClick="slideout.toggle();window.location.href = '/about';" style="color:#fff;font-size:22px;font-weight:700;cursor:pointer;"><i class="fas fa-info-circle"></i> About</a>
+	<br />
+	<br />
+</nav>

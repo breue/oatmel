@@ -1,0 +1,18 @@
+<!-- Modal -->
+<div class="modal fade" id="sharePost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="myModalLabel">Share: <%= @post.name %></h3>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <a id="facebooky" href="https://www.facebook.com/sharer/sharer.php?quote=<%= @post.name %> &u=<%= "https://oatmel.com/posts/#{@post.pretty_slug}" %>" target="_blank"><%= image_tag "facebook.png", width: '50' %></a>&nbsp;&nbsp;
+          <a id="twittery" href="https://twitter.com/share?text=<%= @post.name %> &url=<%= "https://oatmel.com/posts/#{@post.pretty_slug}" %>" target="_blank"><%= image_tag "twitter.png", width: '50' %></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

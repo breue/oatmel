@@ -1,0 +1,74 @@
+<% if notification.seen %>
+	<div class="list-group-item list-group-item-action flex-column align-items-start">
+<% else %>
+	<div class="list-group-item list-group-item-action flex-column align-items-start" style="background-image: linear-gradient(120deg, #FFF2C8 0%, #FFC9B3 70%);">
+<% end %>
+	<div class="row">
+		<div class="col-2" style="padding-left:6px;">
+			<a href="/profiles/<%= notification.blob['profile']['pretty_slug'] %>" style="text-decoration:none;color:#333;">
+				<div class="medium" style='background-image: url(<%= notification.blob['profile']['image_url'] %>); width:70px; height:70px; display:inline-block;'></div>
+			</a>
+		</div>
+		<div class="col-10">
+			<div class="notification_container">
+			<% if notification.blob["role"] == "helpful_review" %>
+				<a href="/products/<%= notification.blob['pretty_slug'] %>" style="color:#333;text-decoration:none;">
+					<strong><%= notification.blob['profile']['name'] %></strong> found your review helpful.
+					<br />
+					<br />
+					<strong><%= notification.blob["product"] %></strong>
+					<br />
+					<%= truncate(notification.blob["review_text"], length: 150) %>
+					<br />
+				</a>
+			<% elsif notification.blob["role"] == "upvoted_post" %>
+				<a href="/posts/<%= notification.blob['pretty_slug'] %>" style="color:#333;text-decoration:none;">
+					<strong><%= notification.blob['profile']['name'] %></strong> upvoted your post.
+					<br />
+					<br />
+					<strong><%= notification.blob["post_name"] %></strong>
+					<br />
+					<%= truncate(notification.blob["post_description"], length: 150) %>
+					<br />
+				</a>
+			<% elsif notification.blob["role"] == "upvoted_comment" %>
+				<a href="/posts/<%= notification.blob['pretty_slug'] %>" style="color:#333;text-decoration:none;">
+					<strong><%= notification.blob['profile']['name'] %></strong> upvoted your comment.
+					<br />
+					<br />
+					<strong><%= notification.blob["post_name"] %></strong>
+					<br />
+					<%= truncate(notification.blob["comment"], length: 150) %>
+					<br />
+				</a>
+			<% elsif notification.blob["role"] == "post_comment" %>
+				<a href="/posts/<%= notification.blob['pretty_slug'] %>" style="color:#333;text-decoration:none;">
+					<strong><%= notification.blob['profile']['name'] %></strong> commented on your post.
+					<br />
+					<br />
+					<strong><%= notification.blob["post_name"] %></strong>
+					<br />
+					<%= truncate(notification.blob["comment"], length: 150) %>
+					<br />
+				</a>
+			<% elsif notification.blob["role"] == "reply_comment" %>
+				<a href="/posts/<%= notification.blob['pretty_slug'] %>" style="color:#333;text-decoration:none;">
+					<strong><%= notification.blob['profile']['name'] %></strong> replied to your comment.
+					<br />
+					<br />
+					<strong><%= notification.blob["post_name"] %></strong>
+					<br />
+					<%= truncate(notification.blob["comment"], length: 150) %>
+					<br />
+				</a>
+			<% elsif notification.blob["role"] == "verified" %>
+				<a href="/profiles/<%= notification.blob['profile']['pretty_slug'] %>" style="color:#333;text-decoration:none;">
+					<%= image_tag "verified.svg", style: "width:30px;height:30px;" %>
+					Yay! You are on a roll with posting reviews. Your account is now verified!
+				</a>
+			<% end %>
+			</div>
+		</div>
+	</div>
+</div>
+<% notification.see %>

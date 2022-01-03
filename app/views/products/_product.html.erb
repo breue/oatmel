@@ -1,0 +1,40 @@
+<div style="margin-bottom:15px;">
+	<% if product.pick_of_the_week %>
+		<div class="card" style="border:2px solid #FFC108;">
+	<% else %>
+		<div class="card" style="">
+	<% end %>
+	<a   href="/products/<%= product.pretty_slug %>" style="color:#333;text-decoration:none;" data-turbolinks-persist-scroll=true>
+		<div class="card-block">
+			<div class="fade-in">
+				<% if product.img_front? %>
+				<% 
+				ratio = product.img_ratio + 0.125
+				adjusted_height = ratio * 230.0# + rand(0..20)
+				%>
+				<div class="recty_product" style='background-image: url(<%= product.img_front_url %>); width:100%;height:<%= adjusted_height %>px;'></div>
+				<div class="show_on_mobile">
+					<%= image_tag "#{product.img_front_url}", style: "width:100%;", class: "pretty" %>
+				</div>
+				<% end %>
+			</div>
+			<div style="padding:7px;padding-bottom:0px;">
+				<strong>
+				<%= truncate(product.name, length: 60) %>
+				</strong>
+			</div>
+			<div style="padding:7px;padding-top:0px;">
+				<span style="float:right;">
+				<i class="fas fa-utensil-spoon" style="color:#6BCC00;"></i> <%= product.rating %>
+				</span>
+				<small style="text-muted"><%= truncate(product.place_name, length: 30) %></small>
+			</div>
+			<% if product.pick_of_the_week %>
+				<div class="alert alert-warning" role="alert" style="font-weight:bold;margin-bottom:0px;margin-top:0px;">
+				  <i class="fas fa-medal"></i> Product of the week
+				</div>
+			<% end %>
+		</div>
+	</a>
+	</div>
+</div>

@@ -1,0 +1,35 @@
+    <h2>
+      <a data-toggle="modal" data-target="#shareProduct" class="btn btn-light" style="cursor:pointer;float:right;margin-left:10px;"><i class="fa fa-share" aria-hidden="true"></i></a>
+      <% if @current_user %>
+        <% if !(@current_user.favorited?(@product)) %>
+              <div id="favorite_holder">
+                <a onClick="addToFavorites('<%= @product.slug %>');" class="btn btn-light" style="float:right;cursor:pointer;margin-left:10px;"><i class="fas fa-star"></i></a>
+              </div>
+              <span id="favorite_mssg" style="display:none;float:right;font-size:13px;font-weight:normal;">Added to favorites!</span>
+        <% end %>
+      <% end %>
+      <%= @product.name %>
+    </h2>
+    <div style="margin-top:-8px;">
+          <small style="text-muted"><%= @product.place_name %></small>
+    </div>
+          <div class="row">
+            <div class="col-6">
+              <%= @product.rating_count %> Reviews - <i class="fas fa-utensil-spoon" style="color:#6BCC00;"></i> <%= @product.rating %>
+              <% if @current_user %>
+                <% if @current_user.admin? %>
+                  <%= link_to "/hide?role=Product&slug=#{@product.slug}", method: :post, :data => {:confirm => 'Are you sure you want to ban this product?'}, style: "font-size:14px;color:#9B9B9B;margin-left:7px;" do %>
+                    <i class="fas fa-flag"></i>
+                  <% end %>
+                  <% if !(@product.pick_of_the_week) %>
+                    <%= link_to "/feature?role=Product&slug=#{@product.slug}", method: :post, :data => {:confirm => 'Are you sure you want to feature this product?'}, style: "font-size:14px;color:#9B9B9B;margin-left:7px;" do %>
+                      <i class="fas fa-trophy"></i>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="col-6">
+            </div>
+          </div>
+          <br />

@@ -1,0 +1,88 @@
+  <br />
+  <div class="row">
+  <div class="col-md-3">
+    <div style="background-color:#9DCD2B;width:150px;height:150px;border-radius:75px;display:block;text-align:center;font-size:50px;padding-top:36px;font-weight:bold;color:#ffffff;line-height:80px;margin-left:auto;margin-right:auto;"><%= User.count %></div>
+    <h2 style="text-align:center;">Users</h2>
+    <div class="show_on_mobile"><br /><br /></div>
+  </div>
+  <div class="col-md-3">
+    <div style="background-color:#EB4714;width:150px;height:150px;border-radius:75px;display:block;text-align:center;font-size:50px;padding-top:36px;font-weight:bold;color:#ffffff;line-height:80px;margin-left:auto;margin-right:auto;"><%= Product.count %></div>
+    <h2 style="text-align:center;">Products</h2>
+    <div class="show_on_mobile"><br /><br /></div>
+  </div>
+  <div class="col-md-3">
+    <div style="background-color:#34C8FF;width:150px;height:150px;border-radius:75px;display:block;margin-left:auto;margin-right:auto;text-align:center;font-size:50px;padding-top:36px;font-weight:bold;color:#ffffff;line-height:80px;margin-left:auto;margin-right:auto;"><%= Review.count %></div>
+    <h2 style="text-align:center;">Reviews</h2>
+    <div class="show_on_mobile"><br /><br /></div>
+  </div>
+  <div class="col-md-3">
+    <div style="background-color:#F8E81C;width:150px;height:150px;border-radius:75px;display:block;margin-left:100px;text-align:center;font-size:50px;padding-top:36px;font-weight:bold;color:#ffffff;line-height:80px;margin-left:auto;margin-right:auto;"><%= Post.count %></div>
+  <h2 style="text-align:center;">Posts</h2>
+  <div class="show_on_mobile"><br /><br /></div>
+</div>
+</div>
+<div class="show_on_desktop">
+	<br />
+	<br />
+</div>
+<div class="row">
+  <div class="col-md-3">
+    <div style="background-color:#F8E81C;width:150px;height:150px;border-radius:75px;display:block;margin-left:100px;text-align:center;font-size:50px;padding-top:36px;font-weight:bold;color:#ffffff;line-height:80px;margin-left:auto;margin-right:auto;"><%= Comment.count %></div>
+  <h2 style="text-align:center;">Comments</h2>
+  <div class="show_on_mobile"><br /><br /></div>
+</div>
+ <div class="col-md-3">
+    <div style="background-color:#34C8FF;width:150px;height:150px;border-radius:75px;display:block;margin-left:auto;margin-right:auto;text-align:center;font-size:50px;padding-top:36px;font-weight:bold;color:#ffffff;line-height:80px;margin-left:auto;margin-right:auto;"><%= Upvote.count %></div>
+    <h2 style="text-align:center;">Claps</h2>
+    <div class="show_on_mobile"><br /><br /></div>
+  </div>
+  <div class="col-md-3">
+    <div style="background-color:#EB4714;width:150px;height:150px;border-radius:75px;display:block;text-align:center;font-size:50px;padding-top:36px;font-weight:bold;color:#ffffff;line-height:80px;margin-left:auto;margin-right:auto;"><%= Feedback.count %></div>
+    <h2 style="text-align:center;">Feedbacks</h2>
+    <div class="show_on_mobile"><br /><br /></div>
+  </div>
+  <div class="col-md-3">
+    <div style="background-color:#9DCD2B;width:150px;height:150px;border-radius:75px;display:block;text-align:center;font-size:50px;padding-top:36px;font-weight:bold;color:#ffffff;line-height:80px;margin-left:auto;margin-right:auto;"><%= Favorite.count %></div>
+    <h2 style="text-align:center;">Favorites</h2>
+    <div class="show_on_mobile"><br /><br /></div>
+  </div>
+</div>
+<br />
+<br />
+<div style="margin-left:80px;">
+  <a onClick="scrambleProducts()" class="btn btn-dark" style="color:#fff;cursor:pointer;">Scramble Products</a>
+  <span id="status" style="display:none;">Scrambling...</span>
+  <br />
+  <br />
+  <%= link_to "Download CSV", "/export.csv", class: "btn btn-info"  %>
+  <br />
+  <hr>
+  <%= link_to "/broadcast", method: :post, :data => {:confirm => 'Warning! Are you sure you want to send a broadcast??'}, class: "btn btn-danger" do %>
+        <i class="fas fa-volume-up"></i> Send weekly broadcast email
+      <% end %>
+<br />
+<br />
+<br />
+<br />
+<br />
+</div>
+<% if @current_user %>
+    <% if @current_user.admin? %>
+    <script>
+    function scrambleProducts(){
+      $.ajax({
+        url: '/scramble/',
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+          $("#status").show();
+            function hideStatus(){ 
+                $("#status").fadeOut();
+            };
+            setInterval(hideStatus, 4000);
+        }
+      });
+    }
+    </script>
+    <% end %>
+<% end %>

@@ -1,0 +1,24 @@
+<% if @favorites %>
+	var new_node = jQuery.parseHTML('<%= j render :partial => "profiles/favorite", :collection => @favorites, :as => :favorite %>');
+	bricklayer.append(new_node);
+	<% if @favorites.next_page %>
+	  $('.pagination').replaceWith('<%= j will_paginate(@favorites) %>');
+	<% else %>
+	  $('.pagination').remove();
+	<% end %>
+<% elsif @posts  %>
+	$('#profile_posts').append('<%= j render :partial => "posts/post", :collection => @posts, :as => :post %>');
+	<% if @posts.next_page %>
+	  $('.pagination').replaceWith('<%= j will_paginate(@posts) %>');
+	<% else %>
+	  $('.pagination').remove();
+	<% end %>
+<% elsif @reviews %>
+	$('#profile_reviews').append('<%= j render :partial => "profiles/review", :collection => @reviews, :as => :review %>');
+	<% if @reviews.next_page %>
+	  $('.pagination').replaceWith('<%= j will_paginate(@reviews) %>');
+	<% else %>
+	  $('.pagination').remove();
+	<% end %>
+<% end %>
+

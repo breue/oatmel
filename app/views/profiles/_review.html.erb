@@ -1,0 +1,51 @@
+<div class="row">
+	<div class="col-8">
+		<span style="float:right;">
+			<% review.rating.times do %>
+			  <i class="fas fa-utensil-spoon" style="color:#6BCC00;"></i>
+			<% end %>
+			<strong><%= review.rating %></strong>
+		</span>
+		<div style="display:block;margin-top:-15px;margin-bottom:15px;">
+		<span class="fade-in">
+			<div class="medium" style='background-image: url(<%= review.user.img %>); width:60px; height:60px; display:inline-block;margin-bottom:-20px;'></div>
+		</span>
+		<div style="display:inline-block;margin-top:20px;"><strong><a href="/profiles/<%= review.user.pretty_slug %>" style="color:#333;text-decoration:none;cursor:pointer;"><%= review.user.name %></a> <%= badge(review.user, 'small') %></strong></div>
+		</div>
+		  <p><%= review.description %></p>
+		  <div class="row">
+		    <div class="col-12">
+		      <% if review.helpful_count > 0 %>
+			      <strong><span id="<%= review.slug %>"><%= review.helpful_count %></span> people found this review helpful.</strong>
+		      <% end %>
+		    </div>
+		  </div>
+		  <br />
+			</div>
+			<div class="col-4">
+				<a href="/products/<%= review.product.pretty_slug %>" style="color:#333;text-decoration:none;">		
+							<div class="fade-in">
+								<% if review.product.img_front? %>
+
+								<div class="show_on_desktop">
+									<div class="recty" style='background-image: url(<%= review.product.img_front_url %>); width:100%; display:inline-block;border-radius:2px;height:160px;'></div>
+								</div>
+	
+								<div class="show_on_mobile">
+									<%= image_tag "#{review.product.img_front_url}", style: "width:100%;", class: "pretty" %>
+								</div>
+								<% end %>
+							</div>
+							<div style="margin-top:6px;">
+								<strong>
+								<%= review.product.name %>
+								</strong>
+							</div>
+							<div style="margin-top:-2px;">
+								<small style="text-muted"><%= review.product.place_name %></small>					
+							</div>
+				</a>
+		   </div>
+</div>
+<br />
+<br />

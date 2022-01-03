@@ -1,0 +1,67 @@
+<% if "#{params[:query]}".size > 0 %>
+  <script>
+    let url = '<%= current_page_path %>'
+    history.replaceState({ turbolinks: { restorationIdentifier: '<%= SecureRandom.uuid %>' } }, '', url)
+    sessionStorage.setItem('<%= last_page_fetched_key %>', url);
+  </script>
+  	<%
+  		meta :title => "#{params[:query]} | Oatmel",
+  		:keywords => ["#{params[:query]}".downcase, "oatmel", "oatmal", "trader joes reviews", "whole foods reviews", "organic food reviews", "food product reviews"]
+  	%>
+<% end %>
+
+<%= render 'products/product_search' %>
+<div class="clearfix"></div>
+<div class="oatmeal_brick_container">
+<div class="bricklayer" id="holder">
+    <%= render @products %>
+ </div>
+</div>
+<br>
+
+<% if @pagy.next %>
+  <div style='display:none;'>
+    <%= pagy_bootstrap_nav(@pagy).html_safe %>
+  </div>
+<% end %>
+
+<% if "#{params[:query]}".size == 0 %>
+	<%= clear_session_storage_when_fresh_unpaginated_listing_loaded %>
+<% end %>
+
+<script>
+ var bricklayer = new Bricklayer(document.querySelector('.bricklayer'));
+</script>
+
+<script>
+  var bricks = bricklayer.elements.length;
+  if (bricks === 0) {
+  	var new_node = jQuery.parseHTML('<%= j render(@products) %>');
+  	bricklayer.append(new_node);
+  } 
+</script>
+
+<script>
+  function param(name) {
+      return (location.search.split(name + '=')[1] || '').split('&')[0];
+  }
+  function search_param(name, url) {
+      return (url.split(name + '=')[1] || '').split('&')[0];
+  }
+  var prev_page = "1";
+  $(window).scroll(function() {
+     if($(window).scrollTop() + $(window).height() > $(document).height() - 450) {
+         var url;
+        url = $(".next").find("a[rel='next']").attr('href');
+        if (url) {
+          if (search_param('page', url) !== param('page')) {
+            if (prev_page !== param('page')) {
+              prev_page = param('page');
+                return $.getScript(url);
+            }
+          } 
+        }
+      return $(window).scroll();
+     }
+  });
+</script>

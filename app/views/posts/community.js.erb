@@ -1,0 +1,32 @@
+<%
+def reject_param(url, param_to_reject)
+  url_regex = %r"^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$"
+  raise "Not a url: #{url}" unless url =~ url_regex
+  scheme_plus_punctuation = $1
+  authority_with_punctuation = $3
+  path = $5
+  query = $7
+  fragment = $9
+  query = query.split('&').reject do |param|
+    param_name = param.split(/[=;]/).first
+    param_name == param_to_reject
+  end.join('&')
+  [scheme_plus_punctuation, authority_with_punctuation, path, '?', query, fragment].join
+end
+%>
+(function() {
+$('#praises-scroll3').append('<%= j render :partial => "posts/post", :collection => @posts, :as => :post %>');
+  <% if @pagy.next %>
+    $('.pagy-bootstrap-nav').replaceWith('<%= j pagy_bootstrap_nav(@pagy).html_safe %>');
+  <% else %>
+    $('.pagy-bootstrap-nav').remove();
+  <% end %>
+  <%
+  cleaned_url = reject_param(current_page_path, 'amp')
+  cleaned_url = reject_param(cleaned_url, '_')
+  cleaned_url = reject_param(cleaned_url, 'amp;')
+  %>
+  let url = '<%= cleaned_url %>'
+  history.replaceState({ turbolinks: { restorationIdentifier: '<%= SecureRandom.uuid %>' } }, '', url)
+  sessionStorage.setItem('<%= last_page_fetched_key %>', url)
+})();

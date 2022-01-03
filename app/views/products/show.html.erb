@@ -1,0 +1,155 @@
+<% if !(@play) %>
+  <%
+  meta :title => "#{@product.name} - #{@product.place_name} | Oatmel",
+       :keywords => ("#{@product.name}".downcase.split(" ") + ["#{@product.place_name}".downcase]).flatten
+  %>
+<% end %>
+<style>
+.card-columns {
+  column-count: 2;
+}
+</style>
+<%= render 'products/product_search' %>
+<div class="clearfix"></div>
+<div class="oatmeal_container">
+<div class="row">
+  <div class="col-md-6">
+    <div class="show_on_mobile">
+      <%= render 'products/mobile_details' %>
+      <%= render 'products/mobile_overview' %>
+    </div>
+    <div class="clearfix"></div>
+  <div class="show_on_desktop">
+    <%= render 'products/details' %>
+  </div>
+    <div id="praises-scroll4" data-no-turbolink="true" style="margin-top:40px;">
+        <%= render :partial => "products/review", :collection => @reviews, :as => :review %>
+    </div>
+    <div style="display:none;">
+      <%= will_paginate @reviews %>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="show_on_desktop">
+      <%= render 'products/overview' %>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<script>
+function markHelpful(review_id, score) {
+  $.ajax({
+    url: '/rate_review/' + review_id + "/" + score,
+    type: "POST",
+    dataType: "json",
+    success: function (data) {
+      if (data["status"] == "success") {
+        $("#" + review_id).text(data["helpful_count"]);
+        $("#feedback_holder_" + review_id).hide();
+        $("#thank_" + review_id).show();
+        function hideThanks(){ 
+        $("#thank_" + review_id).hide();
+    };
+    setInterval(hideThanks, 5000);
+      }
+    }
+  });
+}
+</script>
+<script>
+function addToFavorites(product_id) {
+  $.ajax({
+    url: '/favorite/' + product_id,
+    type: "POST",
+    dataType: "json",
+    success: function (data) {
+      if (data["status"] == "success") {
+        $("#favorite_holder").hide();
+        $("#favorite_mssg").show();
+        function hideMssg(){ 
+        $("#favorite_mssg").hide();
+    };
+    setInterval(hideMssg, 5000);
+      }
+    }
+  });
+}
+</script>
+<script>
+function addToFavorites2(product_id) {
+  $.ajax({
+    url: '/favorite/' + product_id,
+    type: "POST",
+    dataType: "json",
+    success: function (data) {
+      if (data["status"] == "success") {
+        $("#favorite_holder2").hide();
+        $("#favorite_mssg2").show();
+        function hideMssg(){ 
+        $("#favorite_mssg2").hide();
+    };
+    setInterval(hideMssg, 5000);
+      }
+    }
+  });
+}
+</script>
+<script>
+function addReview(product_id, rating, summary) {
+  $.ajax({
+    url: '/add_review/' + product_id,
+    data: {
+      rating: rating,
+      summary: summary
+      },
+    type: "POST",
+    dataType: "json",
+    success: function (data) {
+      if (data["status"] == "success") {
+        $('#newReview').modal('hide');
+        const spoonup = num => "<i class='fas fa-utensil-spoon' style='color:#6BCC00;'></i>&nbsp;".repeat(num);
+        var spoon_ratings = spoonup(parseInt(data["rating"]));
+        var html =  "<span style='float:right;'>" + spoon_ratings + "&nbsp;" + "<strong>" + data["rating"] + "</strong>" + "</span>";
+        html = html + "<div style='display:block;margin-top:-15px;margin-bottom:15px;'>" + "<span class='fade-in'>";
+        html = html + "<a href='/profiles/" + data["user_slug"] + "style='color:#333;text-decoration:none;cursor:pointer;'>";
+        html = html + "<div class='medium' style='background-image: url(" +  data["user_image"] + "); width:60px; height:60px; display:inline-block;margin-bottom:-20px;'></div>";
+        html = html + "</a></span>" + "<div style='display:inline-block;margin-top:20px;''><strong><a href='/profiles/" + data["user_slug"] + "' style='color:#333;text-decoration:none;cursor:pointer;'>";
+        html = html + "&nbsp;" + data["user_name"] + "</a></strong></div></div>";
+        html = html + "<p>" + data["description"] + "</p><hr><br />";
+        $("#reviewer_1").hide();
+        $("#reviewer_2").hide();
+        $("#col_reviewer1").css("margin-top", "0px");
+        $(html).hide().prependTo("#praises-scroll4").fadeIn(1000);
+    }
+  }
+  });
+}
+</script>
+<script>
+  $( document ).ready(function(){
+  $('#imgCarousel2').carousel({
+      interval: 4000
+    });
+  });
+  $( document ).ready(function(){
+  $('#imgCarousel').carousel({
+      interval: 4000
+    });
+  });
+</script>
+<script>
+  $(window).unbind("scroll");
+  $(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 200) {
+       var url;
+      url = $('.pagination .next_page').attr('href');
+      if (url) {
+        $('.pagination').text(" ");
+        return $.getScript(url);
+      }
+    return $(window).scroll();
+   }
+});
+</script>
+<% @product.view %>

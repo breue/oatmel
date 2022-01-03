@@ -1,0 +1,33 @@
+<div class="container">
+	<div style="width:500px;max-width:100%;max-height:100%;">
+		<div class="list-group">
+			<div id="notifications-scroll" data-no-turbolink="true">
+				<%= render @notifications %>
+				<% if @notifications.size == 0 %>
+					<div class="list-group-item list-group-item-action flex-column align-items-start">
+						<%= render 'notifications/empty' %>
+					</div>
+				<% end %>
+			</div>
+			<div style="display:none;">
+				<%= will_paginate @notifications %>
+			</div>
+		</div>
+	</div>
+</div>
+<br />
+<br />
+<br />
+<script>
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 200) {
+       var url;
+      url = $('.pagination .next_page').attr('href');
+      if (url) {
+        $('.pagination').text(" ");
+        return $.getScript(url);
+      }
+    return $(window).scroll();
+   }
+});
+</script>

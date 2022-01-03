@@ -1,0 +1,23 @@
+<%= image_tag "https://oatmel.s3.amazonaws.com/mailer/logo.png", style: "width:150px;display:block;margin-left:auto;margin-right:auto;margin-bottom:40px;" %>
+<p>
+<%= OPENERS.sample %> <%= @user.first_name %>,
+<br />
+<br />
+You're on a roll! Thank you for posting some great stuff on Oatmel! Your account is now verified and will show a verified badge near your name for all reviews, posts, or comments you make! :)
+<br />
+<%= link_to "View profile", "#{ENV['ROOT_PATH']}profiles/#{@user.pretty_slug}" %>
+<br />
+<br />
+<%= CLOSERS.sample %>
+<br />
+<br />
+-Team Oatmel
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<%= link_to "Notification Settings", "#{ENV['ROOT_PATH']}notification_settings/#{@user.slug}" %>
+</p>

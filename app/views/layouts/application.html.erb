@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% if @play %>
+      <title>Oatmel</title>
+      <meta name="robots" content="noindex" />
+    <% else %>
+      <%= metamagic :title => "Oatmel", :description => "Oatmel is good. Find out what else is good. You can now see reviews of some great stuff at Trader Joe's, Whole Foods and your other favorite places.", :keywords => ["oatmel", "oatmal", "trader joes reviews", "whole foods reviews", "organic food reviews", "food product reviews"]  %>
+    <% end %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/2e42304852.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="turbolinks-cache-control" content="no-preview">
+    <% if !(@play) %>
+      <%= render "layouts/og_meta" %>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154553713-1"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '<%= ENV['GA_TRACKING_CODE'] %>');
+      </script>
+    <% end %>
+  </head>
+     <body <%= maybe_preserve_scroll %>>
+    <% flash.each do |name, msg| %>
+      <% splitted = "#{msg}".split("-") %>
+      <script>
+      tata.info('<%= splitted.first %>', '<%= splitted.last %>')
+      </script>
+    <% end %>
+    <% if !(@locked) %>
+      <%= render 'layouts/sidebar' %>
+      <%= render 'layouts/header' %>
+    <% end %>
+    <main id="main" class="panel"> 
+      <br />
+      <br />
+      <br />
+      <%= yield %>
+    </main>
+    <% if !(@locked) %>
+      <%= render 'layouts/footer' %>
+    <% end %>
+  </body>
+</html>

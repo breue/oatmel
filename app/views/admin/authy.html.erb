@@ -1,0 +1,13 @@
+<div class="container">
+	<div style="width:400px;max-width:100%:max-height:100%;">
+		<%= form_tag("/unlock", :method => "put") do %>
+			<strong>Token <i class="fa fa-key" aria-hidden="true"></i></strong>
+			<br />
+			<%= text_field_tag "token", nil, :required => true, :style=> 'max-width:100%;max-height:100%;', :class => "form-control form-control-lg", :placeholder => "token", autofocus: true %>
+			<br />
+			<%= button_tag( :class => "btn btn-success btn-lg btn-block") do %>
+				 Enter
+			<% end %>
+		<% end %>
+	</div>
+</div>

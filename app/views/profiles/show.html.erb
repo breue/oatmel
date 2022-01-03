@@ -1,0 +1,161 @@
+<% if !(@play) %>
+	<%
+		meta :title => "#{@user.name} | Oatmel"
+	%>
+<% end %>
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+            <span class="fade-in">
+				<div class="medium" style='background-image: url(<%= @user.img %>); width:120px; height:120px; display:inline-block;'></div>
+		    </span>
+		    <% if @user == @current_user %>
+		    	<a data-toggle="modal" data-target="#setAvatar" class="btn btn-light btm-sm" style="cursor:pointer">Edit</a>
+		    <% end %>
+			<h2><%= @user.name %> <%= badge(@user, "Large") %>
+			  <% if @current_user %>
+			    <% if @current_user.admin? %>
+			      <%= link_to "/hide?role=User&slug=#{@user.slug}", method: :post, :data => {:confirm => 'Are you sure you want to ban this user?'}, style: "font-size:14px;color:#9B9B9B;float:right;" do %>
+			        <i class="fas fa-flag"></i>
+			      <% end %>
+			    <% end %>
+			  <% end %>
+			</h2>
+			<br />
+			<div class="list-group">
+				<div class="list-group-item list-group-item-action flex-column align-items-start">
+					Points <span class="badge badge-info"><%= @user.karma %></span>
+				</div>
+				<div class="list-group-item list-group-item-action flex-column align-items-start">
+					Posts <span class="badge badge-info"><%= @user.post_count %></span>
+				</div>
+			</div>
+			<% if @user == @current_user %>
+			<br />
+			<a data-toggle="modal" data-target="#notificationSettings" class="btn btn-light" style="cursor:pointer;">Notfication Settings</a>
+				<br />
+				<br />
+				<%= link_to "/logout", method: "PUT", class: "btn btn-light" do %>
+					Logout
+				<% end %>
+			<% end %>
+		<br />
+		<br />
+		</div>
+		<div class="col-md-9">
+			<div class="list-group">
+				<div class="list-group-item list-group-item-action flex-column align-items-start">
+					 <% if "#{params[:view]}" == "Favorites" %>
+				      <a style="color:#888888;" href="/profiles/<%= @user.pretty_slug %>?view=Reviews">Reviews</a>
+				      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				      <a class="btn btn-default" style="background-color:#FCF9F9;border-color:#E1E1E1;color:#444444;" href="/profiles/<%= @user.pretty_slug %>?view=Favorites">Favorites</a>
+				      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				      <a style="color:#888888;" href="/profiles/<%= @user.pretty_slug %>?view=Posts">Posts</a>
+				    <% elsif "#{params[:view]}" == "Posts" %>
+				      <a style="color:#888888;" href="/profiles/<%= @user.pretty_slug %>?view=Reviews">Reviews</a>
+				      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				      <a style="color:#888888;" href="/profiles/<%= @user.pretty_slug %>?view=Favorites">Favorites</a>
+				      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				      <a class="btn btn-default" style="background-color:#FCF9F9;border-color:#E1E1E1;color:#444444;" href="/profiles/<%= @user.pretty_slug %>?view=Posts">Posts</a>
+				    <% else %>
+				      <a class="btn btn-default" style="background-color:#FCF9F9;border-color:#E1E1E1;color:#444444;" href="/profiles/<%= @user.pretty_slug %>?view=Reviews">Reviews</a>
+				      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				      <a style="color:#888888;" href="/profiles/<%= @user.pretty_slug %>?view=Favorites">Favorites</a>
+				      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				      <a style="color:#888888;" href="/profiles/<%= @user.pretty_slug %>?view=Posts">Posts</a>
+				    <% end %>
+				</div>
+				<% if "#{params[:view]}" == "Favorites" %>
+				<div class="list-group-item list-group-item-action flex-column align-items-start" style="padding:0px;padding-top:12px;" id="profile_holder">
+				<% else %>
+				<div class="list-group-item list-group-item-action flex-column align-items-start" id="profile_holder">
+					<br />
+				<% end %>
+					<% if "#{params[:view]}" == "Favorites" %>
+						<% if @favorites.size > 0 %>
+							<div class="bricklayer">
+							    <%= render :partial => "profiles/favorite", :collection => @favorites, :as => :favorite %>
+							</div>
+							<div style="display:none;">
+								<%= will_paginate @favorites %>
+							</div>
+						<% else %>
+							<%= render 'profiles/empty' %>
+						<% end %>
+					<% elsif "#{params[:view]}" == "Posts" %>
+						<% if @posts.size > 0 %>
+							<div id="profile_posts" data-no-turbolink="true">
+								<%= render :partial => "posts/post", :collection => @posts, :as => :post %>
+							</div>
+							<div style="display:none;">
+								<%= will_paginate @posts %>
+							</div>
+						<% else %>
+							<%= render 'profiles/empty' %>
+						<% end %>
+					<% else %>
+						<% if @reviews.size > 0 %>
+							<div id="profile_reviews" data-no-turbolink="true">
+								<%= render :partial => "profiles/review", :collection => @reviews, :as => :review %>
+							</div>
+							<div style="display:none;">
+								<%= will_paginate @reviews %>
+							</div>
+						<% else %>
+							<%= render 'profiles/empty' %>
+						<% end %>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br />
+<br />
+<script>
+function removeFromFavorites(product_id) {
+  $.ajax({
+    url: '/unfavorite/' + product_id,
+    type: "POST",
+    dataType: "json",
+    success: function (data) {
+      if (data["status"] == "success") {
+        $("#favorite_" + product_id).fadeOut(500);
+	   };
+	}
+  });
+}
+</script>
+<style>
+@media only screen and (min-width:2px) {
+  .bricklayer-column-sizer {
+    width: 50%;
+  }
+}
+@media only screen and (min-width:700px) {
+  .bricklayer-column-sizer {
+    width: 25%;
+  }
+}
+.bricklayer-column {
+	padding-left: 7px;
+	padding-right: 7px;
+}
+</style>
+<script>
+var bricklayer = new Bricklayer(document.querySelector('.bricklayer'));
+</script>
+<script>
+	$(window).unbind("scroll");
+  $(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() > $(document).height() - 200) {
+       var url;
+      url = $('.pagination .next_page').attr('href');
+      if (url) {
+        $('.pagination').text(" ");
+        return $.getScript(url);
+      }
+    return $(window).scroll();
+   }
+});
+</script>

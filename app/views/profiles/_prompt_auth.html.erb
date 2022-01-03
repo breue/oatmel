@@ -1,0 +1,22 @@
+<!-- Modal -->
+<div class="modal fade" id="promptAuth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="myModalLabel">Login to Post</h3>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Yay! We'd love to have you contribute, all you need to do is signup/login.
+          <br />
+          <br />
+          <%= google_auth_button proceed_to: create_login_url %>
+          </div>
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

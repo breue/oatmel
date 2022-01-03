@@ -1,0 +1,70 @@
+<!-- Modal -->
+<div class="modal fade" id="newReview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="myModalLabel"><%= @product.name %></h3>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <%= image_tag "#{@product.img_front_url}", style: "width:200px;", class: "pretty" %>
+          <br />
+          <% @new_review = Review.new %>
+          <br />
+          <%= simple_form_for(@new_review, html: { multipart: true, id: "new_review"} ) do |f| %>
+            <%= hidden_field_tag 'product', @product.slug   %>
+            <strong>Description</strong>
+            <%= f.input :description, as: :text, :input_html => { :class => "form-control", :rows => 4, id: "description"}, required: true, label: false, placeholder: "Review description" %>
+            <br />
+            <div class="rating2">
+                <span><input type="radio" name="rating" id="str15" value="5"><label for="str15"></label></span>
+                <span><input type="radio" name="rating" id="str14" value="4"><label for="str14"></label></span>
+                <span><input type="radio" name="rating" id="str13" value="3"><label for="str13"></label></span>
+                <span><input type="radio" name="rating" id="str12" value="2"><label for="str12"></label></span>
+                <span><input type="radio" name="rating" id="str11" value="1"><label for="str11"></label></span>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <div id="step4_error" style="display:none;">
+                <span style="color:red;">Please add a text review and select a rating.</span>
+                <br />
+            </div>
+            <button type="button" id="review_completed" onClick="completeReviewShort();" class="btn btn-info btn-block btn-lg" style="color:#fff;font-weight:700;">Done</button>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var rating_main = 0;
+$(document).ready(function(){
+    $(".rating2 input:radio").attr("checked", false);
+    $('.rating2 input').click(function () {
+        $(".rating2 span").removeClass('checked');
+        $(this).parent().addClass('checked');
+    });
+    $('input:radio').change(
+      function(){
+        var userRating = this.value;
+        rating = userRating;
+    }); 
+});
+</script>
+<script>
+function completeReviewShort () {
+  var review_description = $("#description").val();
+  if (review_description.length > 1 && rating > 0) {
+    $("#review_completed").attr('value', 'One sec...');
+    $("#review_completed").attr('disabled', 'true');
+    addReview('<%= @product.slug %>', rating, review_description)
+  } else {
+    $('#step4_error').show(); 
+  }
+}
+</script>

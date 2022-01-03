@@ -1,0 +1,15 @@
+<%= OPENERS.sample %> <%= @user.first_name %>,
+===============================================
+You currently have <%= @user.unread_notifications %> unread notifications on Oatmel. It looks like folks are finding your posts to be super helpful.
+<%= "#{ENV['ROOT_PATH']}notifications/?view=#{@user.slug}" %>
+===============================================
+<%= CLOSERS.sample %>
+-Team Oatmel
+
+
+
+
+
+
+Notification Settings: 
+<%= "#{ENV['ROOT_PATH']}notification_settings/#{@user.slug}" %>

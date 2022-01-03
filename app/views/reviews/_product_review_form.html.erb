@@ -1,0 +1,341 @@
+<!-- Modal -->
+<div class="modal fade" id="newProductReview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="myModalLabel">Review</h3>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <% @new_product = Product.new %>
+          <div>
+            <%= simple_form_for(@new_product, html: { multipart: false, id: "new_product_review"} ) do |f| %>
+<div id="step1">
+<div class="file-upload" style="max-width:100%;max-height:100%;">
+ <span style="float:right;"><a data-toggle="modal" data-target="#frontPic" style="cursor:pointer;"><i class="fas fa-info-circle"></i> Example</a></span>
+ <strong>Front of product picture</strong> 
+  <div class="image-upload-wrap" style="max-width:100%;max-height:100%;">
+    <input id="front_image" name="front_image" class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+    <input id="front_image_id" name="front_image_id" type="hidden" value="">
+    <div class="drag-text">
+      <h3>Drag and drop or click to select Image</h3>
+    </div>
+  </div>
+  <div class="file-upload-content">
+    <img class="file-upload-image" src="#" alt="your image" />
+    <div class="image-title-wrap">
+      <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+    </div>
+  </div>
+</div>
+<br />
+<div class="file-upload2" style="max-width:100%;max-height:100%;">
+ <span style="float:right;"><a data-toggle="modal" data-target="#backPic" style="cursor:pointer;"><i class="fas fa-info-circle"></i> Example</a></span>
+ <strong>Back of product picture</strong>  
+  <div class="image-upload-wrap2" style="max-width:100%;max-height:100%;">
+    <input id="back_image" name="back_image" class="file-upload-input2" type='file' onchange="readURL2(this);" accept="image/*" />
+    <input id="back_image_id" name="back_image_id" type="hidden" value="">
+    <div class="drag-text2">
+      <h3>Drag and drop or click to select Image</h3>
+    </div>
+  </div>
+  <div class="file-upload-content2">
+    <img class="file-upload-image2" src="#" alt="your image" />
+    <div class="image-title-wrap2">
+      <button type="button" onclick="removeUpload2()" class="remove-image2">Remove <span class="image-title2">Uploaded Image</span></button>
+    </div>
+  </div>
+</div>
+<br />
+<div class="file-upload3" style="max-width:100%;max-height:100%;">
+<span>Extra picture (optional) - Usually if you can't fit the ingredients and nutrition label in one pic.</span>
+  <div class="image-upload-wrap3" style="max-width:100%;max-height:100%;">
+    <input id="extra_image" name="extra_image" class="file-upload-input3" type='file' onchange="readURL3(this);" accept="image/*" />
+    <input id="extra_image_id" name="extra_image_id" type="hidden" value="">
+    <div class="drag-text3">
+      <h3>Drag and drop or click to select Image</h3>
+    </div>
+  </div>
+  <div class="file-upload-content3">
+    <img class="file-upload-image3" src="#" alt="your image" />
+    <div class="image-title-wrap3">
+      <button type="button" onclick="removeUpload3()" class="remove-image3">Remove <span class="image-title3">Uploaded Image</span></button>
+    </div>
+  </div>
+</div>
+<br />
+<div id="step1_error" style="display:none;">
+              <span style="color:red;">Please add a product image, an image of the nutrition label and an image of the ingredients.</span>
+              <br />
+            </div>
+<a onClick="goToStep2();" class="btn btn-warning btn-block btn-lg" style="color:#fff;font-weight:700;">Next</a>
+</div>
+            <div id="step2" style="display:none;">
+              <strong>Product Name</strong>
+              <%= f.input :name, as: :string, :input_html => { :class => "form-control form-control-lg", id: "namey", autocomplete: "off"},required: true, label: false%>
+              <br />
+              <div onClick="$('#alt_holder').hide();$('#hider').hide();" id='hider' style='float:right;cursor:pointer;display:none;'><i class='fas fa-times'></i></div>
+              <div id="alt_holder"></div>
+              <div class="row">
+                <div class="col-6">
+                  <strong>Store Name</strong>
+                  <%= select_tag "store", options_for_select((@places - ["Other", "Online"] + ["Other", "Online"]).flatten), :class => "form-control select form-control-lg", id: "store_searcher", :data => {:toggle=>"select"},  :style => "max-width:100%;max-height:100%;", onchange: "checkStores();", :prompt => "Select" %>
+               <div id="other_store" style="display:none;">
+                  <br />
+                  <strong>Please enter store name</strong>
+                  <%= f.input :place_name, as: :string, :input_html => { :class => "form-control form-control-lg", id: "place_name", autocomplete: "off"},required: true, label: false%>
+                </div>
+                </div>
+                <div class="col-6">
+                  <strong>Category</strong>
+                  <%= select_tag "category", options_for_select((@categories - ["Other"] + ["Other"]).flatten), :class => "form-control select form-control-lg", id: "category_searcher", :data => {:toggle=>"select"},  :style => "max-width:100%;max-height:100%;", onchange: "checkCategories();", :prompt => "Select" %>
+                  <div id="other_category" style="display:none;">
+                  <br />
+                  <strong>Please enter category</strong>
+                  <%= f.input :category_name, as: :string, :input_html => { :class => "form-control form-control-lg", id: "category", autocomplete: "off"},required: true, label: false%>
+                </div>
+                </div>
+              </div>
+              <div id="online_url" style="display:none;">
+                <br />
+                <strong>Please enter the link to the product online</strong>
+                  <%= f.input :url, as: :string, :input_html => { :class => "form-control form-control-lg", id: "product_url", autocomplete: "off"},required: false, label: false %>
+                </div>
+              <br />
+            <div id="step2_error" style="display:none;">
+              <span style="color:red;">Please fill in a name, store, and category.</span>
+              <br />
+            </div>
+            <div id="step2_error_alt" style="display:none;">
+              <span style="color:red;">Please fill in a name, category and the online product link.</span>
+              <br />
+            </div>
+            <div id="url_error" style="display:none;">
+              <span style="color:red;">Please enter a valid url.</span>
+              <br />
+            </div>
+            <div class="row">
+  <div class="col-6">
+    <a onClick="$('#step2').hide();$('#step1').show();" class="btn btn-light btn-block btn-lg" style="color:#333;font-weight:700;">Back</a>
+  </div>
+  <div class="col-6">
+    <a onClick="goToStep3();" class="btn btn-warning btn-block btn-lg" style="color:#fff;font-weight:700;">Next</a>
+  </div>
+</div>          
+</div>
+<div id="loading" style="text-align:center;font-size:20px;display:none;">
+  <strong>One sec...</strong>
+  <br />
+  <%= image_tag "loading.gif", style: "width:100%;" %>
+</div>
+<div id="step3" style="display:none;">
+<div class="input text required review_text"><textarea class="text required form-control" rows="4" id="review_text" required="required" aria-required="true" placeholder="Enter your review here" name="review_text">
+</textarea></div>
+              <br />
+              <div class="rating">
+                  <span><input type="radio" name="rating" id="str5" value="5"><label for="str5"></label></span>
+                  <span><input type="radio" name="rating" id="str4" value="4"><label for="str4"></label></span>
+                  <span><input type="radio" name="rating" id="str3" value="3"><label for="str3"></label></span>
+                  <span><input type="radio" name="rating" id="str2" value="2"><label for="str2"></label></span>
+                  <span><input type="radio" name="rating" id="str1" value="1"><label for="str1"></label></span>
+              </div>
+              <br />
+              <br />
+              <br />
+              <br />
+          <div id="step3_error" style="display:none;">
+                        <span style="color:red;">Please add a text review and select a rating.</span>
+                        <br />
+                      </div>
+          <div class="row">
+            <div class="col-6">
+              <a onClick="$('#step3').hide();$('#step2').show();" class="btn btn-light btn-block btn-lg" style="color:#333;font-weight:700;">Back</a>
+            </div>
+            <div class="col-6">
+              <button type="button" id="review_done" onClick="completeReview();" class="btn btn-info btn-block btn-lg" style="color:#fff;font-weight:700;" disabled=true>Done</button>
+            </div>
+          </div>
+            </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var rating = 0;
+$(document).ready(function(){
+    $(".rating input:radio").attr("checked", false);
+    $('.rating input').click(function () {
+        $(".rating span").removeClass('checked');
+        $(this).parent().addClass('checked');
+    });
+    $('input:radio').change(
+      function(){
+        var userRating = this.value;
+        rating = userRating;
+    }); 
+});
+</script>
+<script>
+var places = <%= raw @places %>;
+var categories = <%= raw @categories %>;
+autocomplete(document.getElementById("place_name"), places);
+autocomplete(document.getElementById("category"), categories);
+</script>
+<script>
+var typingTimer;
+var doneTypingInterval = 1000;
+var $input = $('#namey');
+$input.on('keyup', function () {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(doneTyping, doneTypingInterval);
+});
+$input.on('keydown', function () {
+  clearTimeout(typingTimer);
+});
+function doneTyping () {
+  $.ajax({
+    url: '/scan_products',
+    type: "GET",
+    dataType: "json",
+    data: {query: $("#namey").val()},
+    success: function (data) {
+      if (data["status"] == "success") {
+        var dupes_size = parseInt(data["dupes_size"]);
+        if (dupes_size > 0) {
+          $("#alt_holder").html(data["alts"]);
+          $("#hider").show();
+          $("#alt_holder").show();
+        } else {
+          $("#alt_holder").hide();
+        }
+      }
+    }
+  });
+}
+var typingTimer2;
+var doneTypingInterval2 = 1000;
+var $input2 = $('#place_name');
+$input2.on('keyup', function () {
+  clearTimeout(typingTimer2);
+  typingTimer2 = setTimeout(doneTyping2, doneTypingInterval2);
+});
+$input2.on('keydown', function () {
+  clearTimeout(typingTimer2);
+});
+function doneTyping2 () {
+  var place_entered = $('#place_name').val();
+  if ((place_entered.includes("www")) || (place_entered.includes("http")) || (place_entered.includes(".com"))) {
+        $('#store_searcher').val("Online");
+        $('#other_store').hide();
+        $('#place_name').val("Online"); 
+        $('#product_url').val(place_entered);
+        $('#online_url').show();
+  }
+}
+</script>
+<script>
+function goToStep2 () {
+  var front_image = $("#front_image").val();
+  var back_image = $("#back_image").val();
+  if (front_image.length > 1 && back_image.length > 1) {
+    $('#step1').hide();
+    $('#step1_error').hide();
+    $('#step2').show();  
+  } else {
+    $('#step1_error').show(); 
+  }
+}
+function goToStep3 () {
+  var namey = $("#namey").val();
+  var place_name = $("#place_name").val();
+  var category = $("#category").val();
+  var description = $("#description").val();
+  var product_url = $("#product_url").val();
+  if (namey.length > 1 && place_name.length > 1 && category.length > 1) {
+    if ((place_name == "Online") || (place_name == "Amazon")) {
+      if (product_url.length > 1) {
+        if ((product_url.includes("www")) || (product_url.includes("http")) || (product_url.includes(".com"))) {
+          $('#step2').hide();
+          $('#step2_error').hide();
+          $('#step2_error_alt').hide();
+          $('#url_error').hide();
+          if (image_queue_count == 0) {
+          $('#step3').show();
+          } else {
+          $('#loading').show();
+          }
+        } else {
+          $('#step2_error').hide();
+          $('#step2_error_alt').hide();
+          $('#url_error').show();
+        }
+      } else {
+        $('#step2_error_alt').show();
+        $('#step2_error').hide();
+        $('#url_error').hide();
+      }
+    } else {
+      $('#step2').hide();
+      $('#step2_error').hide();
+      $('#step2_error_alt').hide();
+      $('#url_error').hide();
+      if (image_queue_count == 0) {
+        $('#step3').show();
+      } else {
+        $('#loading').show();
+      }
+    }
+  } else {
+    $('#step2_error_alt').hide();
+    $('#url_error').hide();
+    $('#step2_error').show(); 
+  }
+}
+function completeReview () {
+  var review_text = $("#review_text").val();
+  if (review_text.length > 1 && rating > 0) {
+    $("#review_done").attr('value', 'One sec...');
+    $("#review_done").attr('disabled', 'true');
+    $('#step3').hide();
+    $('#loading').show();
+    $('form#new_product_review').submit(); 
+  } else {
+    $('#step3_error').show(); 
+  }
+}
+</script>
+<script>
+function checkCategories() {
+  var category = $("#category_searcher").val();
+  if (category == "Other") {
+    $('#category').val("");
+    $('#other_category').show();
+  } else {
+    $("#other_category").hide();
+    $('#category').val(category); 
+  } 
+}
+function checkStores() {
+  var store = $("#store_searcher").val();
+  if (store == "Other") {
+    $('#place_name').val("");
+    $('#other_store').show();
+    $('#online_url').hide();
+  } else if ((store == "Online") || (store == "Amazon")) {
+    $('#online_url').show();
+    $('#place_name').val(store); 
+    $("#other_store").hide();
+  } else {
+    $("#other_store").hide();
+    $('#place_name').val(store); 
+    $('#online_url').hide();
+  }
+}
+</script>
+<%= render 'reviews/back_example' %>
+<%= render 'reviews/front_example' %>

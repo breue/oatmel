@@ -1,0 +1,84 @@
+<script>
+var slideout = new Slideout({
+  'panel': document.getElementById('main'),
+  'menu': document.getElementById('menu'),
+  'padding': 256,
+  'tolerance': 70,
+  'touch': false
+});
+var fixed = document.querySelector('.fixed-header');
+slideout.on('translate', function(translated) {
+  fixed.style.transform = 'translateX(' + translated + 'px)';
+});
+slideout.on('beforeopen', function () {
+  fixed.style.transition = 'transform 300ms ease';
+  fixed.style.transform = 'translateX(256px)';
+});
+slideout.on('beforeclose', function () {
+  fixed.style.transition = 'transform 300ms ease';
+  fixed.style.transform = 'translateX(0px)';
+});
+slideout.on('open', function () {
+  fixed.style.transition = '';
+});
+slideout.on('close', function () {
+  fixed.style.transition = '';
+});
+</script>
+<script>
+if( $('.js-slideout-toggle').length ) {
+document.querySelector('.js-slideout-toggle').addEventListener('click', function() {
+  slideout.toggle();
+});
+}
+</script>
+<script>
+$('.panel').click(function(){
+    if ( slideout.isOpen() ){
+      slideout.close();
+    }    
+  });
+</script>
+<script>
+var autoExpand = function (field) {
+  field.style.height = 'inherit';
+  var computed = window.getComputedStyle(field);
+  var height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+               + parseInt(computed.getPropertyValue('padding-top'), 10)
+               + field.scrollHeight
+               + parseInt(computed.getPropertyValue('padding-bottom'), 10)
+               + parseInt(computed.getPropertyValue('border-bottom-width'), 10);
+
+  field.style.height = height + 'px';
+};
+document.addEventListener('input', function (event) {
+  if (event.target.tagName.toLowerCase() !== 'textarea') return;
+  autoExpand(event.target);
+}, false);
+</script>
+<script>
+function hasTouch() {
+  return 'ontouchstart' in document.documentElement
+         || navigator.maxTouchPoints > 0
+         || navigator.msMaxTouchPoints > 0;
+}
+if (hasTouch()) { // remove all the :hover stylesheets
+  try { // prevent exception on browsers not supporting DOM styleSheets properly
+    for (var si in document.styleSheets) {
+      var styleSheet = document.styleSheets[si];
+      if (!styleSheet.rules) continue;
+
+      for (var ri = styleSheet.rules.length - 1; ri >= 0; ri--) {
+        if (!styleSheet.rules[ri].selectorText) continue;
+
+        if (styleSheet.rules[ri].selectorText.match(':hover')) {
+          if (styleSheet.rules[ri].selectorText.match('rating')) {
+          } else {
+            styleSheet.deleteRule(ri);
+          }
+        }
+      }
+    }
+  } catch (ex) {}
+}
+</script>

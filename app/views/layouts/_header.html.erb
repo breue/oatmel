@@ -1,0 +1,93 @@
+<header class="fixed-header" style="background-color:#F6F6F6;padding-top:10px;padding-bottom:15px;z-index: 2;height:60px;">
+	<div class="container">
+		<div style="display:block;height:40px;">
+			<div class="first" style="margin-top:-4px;">
+				<% if (params[:action] == 'index' && "#{params[:query]}".size == 0) || (params[:action] == 'community' && "#{params[:query]}".size == 0) || (params[:action] == 'show' && params[:controller] == "profiles")  %>
+					<a style="cursor:pointer;" class="btn-hamburger js-slideout-toggle">
+						<%= render 'layouts/menu_icon' %>
+					</a>
+					<% if @current_user %>
+					<% if @current_user.unread_notifications > 0 %>
+						<div style="display:block;margin-left:20px;margin-top:-35px;">
+								<span class="badge badge-pill badge-danger" style="font-size:15px;z-index:600;">
+								<%= @current_user.unread_notifications %>
+							</span>
+						</div>	
+					<% end %>
+					<% end %>
+				<% else %>
+				<div style="margin-top:4px;">
+					<% if params[:controller] == "products" && params[:action] == 'show' %>
+						<a data-restores-last-page-fetched="pages_index" href="/" class="fas fa-chevron-left" style="font-size:30px;cursor:pointer;text-decoration:none;color:#333;margin-top:6px;"></a>
+					<% elsif params[:controller] == "posts" && params[:action] == 'show' %>					
+						<a data-restores-last-page-fetched="posts_index" href="/community" class="fas fa-chevron-left" style="font-size:30px;cursor:pointer;text-decoration:none;color:#333;margin-top:6px;"></a>
+					<% elsif params[:action] == "index" && "#{params[:query]}".size > 0 %>
+						<%= link_to "/", style: "font-size:30px;cursor:pointer;text-decoration:none;color:#333;" do %>
+							<i class="fas fa-chevron-left"></i>
+						<% end %>
+					<% elsif params[:action] == "community" && "#{params[:query]}".size > 0 %>
+						<%= link_to "/community", style: "font-size:30px;cursor:pointer;text-decoration:none;color:#333;" do %>
+							<i class="fas fa-chevron-left"></i>
+						<% end %>
+					<% elsif params[:action] == "notifications" %>
+						<%= link_to "/", style: "font-size:30px;cursor:pointer;text-decoration:none;color:#333;" do %>
+							<i class="fas fa-chevron-left"></i>
+						<% end %>
+					<% else %>
+						<%= link_to "/", style: "font-size:30px;cursor:pointer;text-decoration:none;color:#333;" do %>
+							<i class="fas fa-chevron-left"></i>
+						<% end %>
+					<% end %>
+				</div>
+				<% end %>
+			</div>
+			<div class="second">
+				<% if params[:controller] == 'posts' %>
+					<a onClick="clearScroller2();" style="cursor:pointer;"><%= image_tag "community_logo.svg", style: "height:34px;display:block;margin-left:auto;margin-right:auto;margin-top:5px;max-width:100%;max-height:100%;" %></a>
+				<% else %>
+				<div class="show_on_desktop">
+					<a onClick="clearScroller();" style="cursor:pointer;"><%= image_tag "logo.svg", style: "width:150px;display:block;margin-left:auto;margin-right:auto;" %></a>
+				</div>
+				<div class="show_on_mobile">
+					<a onClick="clearScroller();" style="cursor:pointer;"><%= image_tag "logo.svg", style: "height:32px;display:block;margin-left:auto;margin-right:auto;margin-top:2px;" %></a>
+				</div>
+				<% end %>
+			</div>
+			<div class="third">
+				<% if params[:controller] == 'posts' %>
+					<% if @current_user %>
+						<a data-toggle="modal" data-target="#newPost" class="btn btn-info" style="font-size:20px;color:#fff; float:right;cursor:pointer;"><i class="fas fa-marker"></i></a>
+					<% else %>
+						<a data-toggle="modal" data-target="#promptAuth" class="btn btn-info" style="font-size:20px;color:#fff; float:right;cursor:pointer;"><i class="fas fa-marker"></i></a>
+					<% end %>
+				<% else %>
+					<% if @current_user %>
+						<a data-toggle="modal" data-target="#newProductReview" class="btn btn-warning" style="font-size:20px;color:#fff; float:right;cursor:pointer;"><i class="fas fa-utensil-spoon"></i></a>
+					<% else %>
+						<a data-toggle="modal" data-target="#promptAuth" class="btn btn-warning" style="font-size:20px;color:#fff; float:right;cursor:pointer;"><i class="fas fa-utensil-spoon"></i></a>
+					<% end %>
+				<% end %>
+			</div>
+		</div>
+	</div>
+</header>
+<%= render 'reviews/product_review_form' %>
+<% if @product %>
+	<%= render 'reviews/review_form' %>
+	<%= render 'products/view_more_pics' %>
+	<%= render 'products/share' %>
+	<%= render 'products/add_pic' %>
+<% end %>
+<%= render 'profiles/prompt_auth' %>
+<% if params[:controller] == 'posts' %>
+	<%= render 'posts/post_form' %>
+<% end %>
+<% if @post %>
+	<%= render 'posts/share' %>
+<% end %>
+<% if @current_user %>
+	<% if params[:controller] == 'profiles' %>
+		<%= render 'profiles/avatars' %>
+		<%= render 'profiles/notification_settings' %>
+	<% end %>
+<% end %>

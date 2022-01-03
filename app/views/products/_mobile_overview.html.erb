@@ -1,0 +1,95 @@
+<% if @current_user %>
+<% if @current_user.admin? || !(@current_user.reviewed?(@product)) %>
+<div id="reviewer_2">
+  <a data-toggle="modal" data-target="#newReview" class="btn btn-warning btn-block" style="font-size:20px;color:#fff;cursor:pointer;">Write your review <i class="fas fa-utensil-spoon"></i></a>
+  <br />
+</div>
+  <% else %>
+  <% end %>
+<% else %>
+  <a data-toggle="modal" data-target="#promptAuth" class="btn btn-warning btn-block" style="font-size:20px;color:#fff;cursor:pointer;">Write your review <i class="fas fa-utensil-spoon"></i></a>
+  <br />
+<% end %>
+
+  <% if @product.pick_of_the_week %>
+    <div style="border:2px solid #FFC108;margin-bottom:10px;">
+  <% else %>
+    <div style="margin-bottom:10px;">
+  <% end %>
+<% count = 1 %>
+  <div class="fade-in">
+    <a data-toggle="modal" data-target="#morePics" style="cursor:pointer;">
+<div id="imgCarousel" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <% if @product.img_front? %>
+      <li data-target="#imgCarousel" data-slide-to="0" class="active"></li>
+    <% end %>
+    <% if @product.img_back? %>
+      <li data-target="#imgCarousel" data-slide-to="1"></li>
+    <% end %>
+    <% if @product.img_extra? %>
+    <% count += 1 %>
+      <li data-target="#imgCarousel" data-slide-to="<%= count %>"></li>
+    <% end %>
+    <% @images.each do |image| %>
+        <% if image.img? %>
+        <% count += 1 %>
+          <li data-target="#imgCarousel" data-slide-to="<%= count %>"></li>
+        <% end %>
+    <% end %>
+  </ol>
+  <div class="carousel-inner">
+     <% if @product.img_front? %>
+        <div class="carousel-item active">
+                <div class="recty" style='background-image: url(<%= @product.img_front_url %>); width:100%; height:225px; display:inline-block;border-radius:2px;margin-bottom:-6px;'></div>
+        </div>
+      <% end %>
+      <% if @product.img_back? %>
+        <div class="carousel-item">
+                <div class="recty" style='background-image: url(<%= @product.img_back_url %>); width:100%; height:225px; display:inline-block;border-radius:2px;margin-bottom:-6px;'></div>
+        </div>
+      <% end %>
+      <% if @product.img_extra? %>
+        <div class="carousel-item">
+                <div class="recty" style='background-image: url(<%= @product.img_extra_url %>); width:100%; height:225px; display:inline-block;border-radius:2px;margin-bottom:-6px;'></div>
+        </div>
+      <% end %>
+      <% @images.each do |image| %>
+        <% if image.img? %>
+          <div class="carousel-item">
+                  <div class="recty" style='background-image: url(<%= image.img_url %>); width:100%; height:225px; display:inline-block;border-radius:2px;margin-bottom:-6px;'></div>
+          </div>
+        <% end %>
+      <% end %>
+  </div>
+  <a class="carousel-control-prev" href="#imgCarousel" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#imgCarousel" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+   </a>
+    </div>
+    <% if @product.pick_of_the_week %>
+      <div class="alert alert-warning" role="alert" style="font-weight:bold;margin-bottom:0px;margin-top:0px;">
+      <i class="fas fa-medal"></i> Product of the week
+      </div>
+    <% end %>
+  </div>
+ <div style="display:block;margin-bottom:10px;margin-top:14px;margin-left:10px;">
+<a data-toggle="modal" data-target="#morePics" style="cursor:pointer;"><i class="fas fa-eye"></i> View nutrition info and more images</a>
+</div>
+<% if @current_user %>
+  <div style="margin-left:10px;">
+  <a data-toggle="modal" data-target="#addPics" style="cursor:pointer;"><i class="fas fa-plus-circle"></i> Add a picture</a>
+  </div>
+<% end %>
+<% if @product.has_url? %>
+  <div style="margin-left:10px;margin-top:14px;">
+<a href='<%= @product.tracking_url %>' class="btn btn-info btn-sm" target="_blank">Visit this product online</a>
+</div>
+<% end %>
+<%= render 'products/view_more_pics' %>

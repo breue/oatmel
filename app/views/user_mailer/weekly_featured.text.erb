@@ -1,0 +1,15 @@
+<%= OPENERS.sample %> <%= @user.first_name %>,
+===============================================
+The new product of the week: <%= @product.name %>
+<%= "#{ENV['ROOT_PATH']}products/#{@product.pretty_slug}" %>
+===============================================
+<%= CLOSERS.sample %>
+-Team Oatmel
+
+
+
+
+
+
+Notification Settings: 
+<%= "#{ENV['ROOT_PATH']}notification_settings/#{@user.slug}" %>

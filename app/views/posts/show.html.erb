@@ -1,0 +1,197 @@
+<% if !(@play) %>
+	<%
+	meta :title => "#{@post.name} | Oatmel",
+	     :description => "#{@post.description}",
+	     :keywords => "#{@post.name}".downcase.split(" ")
+	%>
+<% end %>
+<%= render 'posts/post_search' %>
+<div class="clearfix"></div>
+<div class="oatmeal_container">
+	<div class="row">
+		<div class="col-md-8">
+			<h3>
+				<a data-toggle="modal" data-target="#sharePost" class="btn btn-light" style="cursor:pointer;float:right;margin-left:10px;"><i class="fa fa-share" aria-hidden="true"></i></a>
+				<%= @post.name %>
+				<% if @current_user %>
+			    <% if @current_user.admin? %>
+			    <div class="show_on_mobile">
+			    	<br />
+			    </div>
+			      <%= link_to "/hide?role=Post&slug=#{@post.slug}", method: :post, :data => {:confirm => 'Are you sure you want to ban this post?'}, style: "font-size:14px;color:#9B9B9B;" do %>
+			        <i class="fas fa-flag"></i>
+			      <% end %>
+			      <% if !(@post.pick_of_the_week) %>
+                    <%= link_to "/feature?role=Post&slug=#{@post.slug}", method: :post, :data => {:confirm => 'Are you sure you want to feature this post?'}, style: "font-size:14px;color:#9B9B9B;margin-left:9px;" do %>
+                      <i class="fas fa-trophy"></i>
+                    <% end %>
+                  <% end %>
+			    <% end %>
+			  <% end %>
+			</h3>
+			<div class="row">
+				<div class="col-1">
+					<a href="/profiles/<%= @post.user.pretty_slug %>">
+						<span class="fade-in">
+							<div class="medium" style='background-image: url(<%= @post.user.img %>); width:60px; height:60px; display:inline-block;'></div>
+						</span>
+					</a>
+					<br />
+					<br />
+				</div>
+				<div class="col-md-10">
+					<% if @current_user %>
+					<% if @current_user != @post.user %>
+					<% if @current_user.upvoted?('Post', @post) %>
+						<a id="upvote_<%= @post.slug %>" onClick="unVote('<%= @post.slug %>', 'Post')" style="cursor:pointer;float:right;">
+						<%= image_tag "/clap.png", style: "width:30px;", class: "clapper", id: "clapper_#{@post.slug}" %>
+						</a>
+					<% else %>
+						<a id="upvote_<%= @post.slug %>" onClick="upVote('<%= @post.slug %>', 'Post')" style="cursor:pointer;float:right;">
+						<%= image_tag "/clap2.png", style: "width:30px;", class: "clapper", id: "clapper_#{@post.slug}" %>
+						</a>
+					<% end %>
+					<% end %>
+					<% end %>
+					<strong style="color:#17a2b8;">
+						<%= link_to @post.category_name, "/community?query=#{@post.category_name}", style: "color:#17a2b8;"  %>
+					</strong>
+					<br />
+					<small>by <strong><%= @post.user.name %></strong> <%= badge(@post.user, 'small') %></small>
+					<br />
+					<%= 
+					auto_link(simple_format(@post.description, class: 'description'), html: { target: '_blank' }, :html => { :target => '_blank' }) do |text|
+					  truncate(text, :length => 50)
+					end
+					%>
+					<div style="max-width:100%;max-height:100%;">
+						<div class="input text required main_comment" style="margin-bottom:10px;"><textarea class="text required form-control" rows="3" id="add_main_comment" required="required" aria-required="true" placeholder="Enter your comment here" name="main_comment"></textarea></div>
+						<% if @current_user %>
+							<button onclick="addComment()" name="button" class="btn btn-info">
+							    Post Comment
+							</button>
+						<% else %>
+							<a data-toggle="modal" data-target="#promptAuth" class="btn btn-info" style="color:#fff;"> Post Comment</a>
+						<% end %>
+					</div>
+					<br />
+					<div id="comments_container">
+						<% @comments.each do |comment| %>
+							<%= render :partial=>"comment", :object=>comment %>
+						<% end %>
+					</div>
+				</div>
+			</div>
+			<br /><br />
+		</div>
+		<div class="col-md-4">
+			<h3>Top Contributors</h3>
+			<div class="show_on_desktop">
+				<%= render 'posts/top_contributors' %>
+			</div>
+			<div class="show_on_mobile">
+				<%= render 'posts/top_contributors_mobile' %>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function addComment() {
+  var description_cmnt = $("#add_main_comment").val();
+	  if (description_cmnt.length > 2) {
+	  	  $.ajax({
+		    url: '/add_comment/' + '<%= @post.slug %>',
+		    type: "POST",
+		    dataType: "json",
+		    data : {description: description_cmnt},
+		    success: function (data) {
+		      if (data["status"] == "success") {
+		        $("#add_main_comment").val('');		        	  	        	  
+	        	    var html = "<div id='comment_section_" + data["slug"] + "' " + "style='display:block;margin-left:30px;margin-top:10px;'>";
+					html = html + "<div class='row' style='margin-bottom:20px;'>";
+					html = html + "<div class='col-1 col-md-auto' style='padding:0px;width:35px;'>";
+					html = html + "<div style='padding:0px;'>";
+					html = html + "<a href='/profiles/'" + data["user_slug"] + "><div class='medium' style='background-image: url(" + data["user_image"] + "); width:30px;";
+					html = html + "height:30px; display:inline-block;margin-top:0px;margin-bottom:4px;'></div></a></div></div>";
+					html = html + "<div class='col-10' style='padding:10px;margin-bottom:10px;padding-top:0px;'><div class='diff_padding'>";
+					html = html + "<div style='margin-bottom:0px;'><strong>" + data["user_name"] + "</strong></div>";
+					html = html + data["description"] + "<br />";
+					html = html + "</div></div></div></div>";
+					$(html).hide().prependTo("#comments_container").fadeIn(1000);
+			   };
+			}
+		  });
+	  }
+}
+</script>
+<script>
+function addReply(comment_id) {
+  var reply_cmnt = $("#reply_" + comment_id).val();
+	  if (reply_cmnt.length > 2) {
+	  	  $.ajax({
+		    url: '/reply_comment/' + comment_id,
+		    type: "POST",
+		    dataType: "json",
+		    data : {description: reply_cmnt},
+		    success: function (data) {
+		      if (data["status"] == "success") {
+		        $("#reply_" + comment_id).val('');		           
+	        	    var html = "<div id='comment_section_" + data["slug"] + "' " + "style='display:block;margin-left:30px;margin-top:10px;'>";
+					html = html + "<div class='row' style='margin-bottom:20px;'>";
+					html = html + "<div class='col-1 col-md-auto' style='padding:0px;width:35px;'>";
+					html = html + "<div style='padding:0px;'>";
+					html = html + "<a href='/profiles'" + data["user_slug"] + "><div class='medium' style='background-image: url(" + data["user_image"] + "); width:30px;";
+					html = html + "height:30px; display:inline-block;margin-top:0px;margin-bottom:4px;'></div></a></div></div>";
+					html = html + "<div class='col-10' style='padding:10px;margin-bottom:10px;padding-top:0px;'><div class='diff_padding'>";
+					html = html + "<div style='margin-bottom:0px;'><strong>" + data["user_name"] + "</strong></div>";
+					html = html + data["description"] + "<br />";
+					html = html + "</div></div></div></div>";
+					$("#reply_holder_" + comment_id).hide();
+					$(html).hide().appendTo("#comment_section_" + comment_id).fadeIn(1000);
+			   };
+			}
+		  });
+	  }
+}
+</script>
+<script>
+function upVote(object_id, role) {
+	if ($("#clapper_" + object_id).attr('src') == "/clap2.png") {
+		$.ajax({
+	    url: '/upvote/' + object_id,
+	    type: "POST",
+	    dataType: "json",
+	    data : {role: role},
+	    success: function (data) {
+	      if (data["status"] == "success") {
+	      	$("#clapper_" + object_id).hide();
+	      	$("#clapper_" + object_id).attr('src', "/clap.png");
+	      	$("#clapper_" + object_id).fadeIn(1000);
+		   };
+		}
+	  });
+	} else {
+		unVote(object_id, role);
+	}
+}
+function unVote(object_id, role) {
+	if ($("#clapper_" + object_id).attr('src') == "/clap.png") {
+  	  $.ajax({
+	    url: '/unvote/' + object_id,
+	    type: "POST",
+	    dataType: "json",
+	    data : {role: role},
+	    success: function (data) {
+	      if (data["status"] == "success") {
+	      	$("#clapper_" + object_id).hide();
+	      	$("#clapper_" + object_id).attr('src', "/clap2.png");
+	      	$("#clapper_" + object_id).fadeIn(1000);
+		   };
+		}
+	  });
+  	} else {
+  		upVote(object_id, role)
+  	}
+}
+</script>
+<% @post.view %>

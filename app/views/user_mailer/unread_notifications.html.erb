@@ -1,0 +1,23 @@
+<%= image_tag "https://oatmel.s3.amazonaws.com/mailer/logo.png", style: "width:150px;display:block;margin-left:auto;margin-right:auto;margin-bottom:40px;" %>
+<p>
+<%= OPENERS.sample %> <%= @user.first_name %>,
+<br />
+<br />
+You currently have <strong><%= @user.unread_notifications %> unread notifications</strong> on Oatmel. It looks like folks are finding your posts to be super helpful.
+<br />
+<%= link_to "View notifications", "#{ENV['ROOT_PATH']}notifications/?view=#{@user.slug}" %>
+<br />
+<br />
+<%= CLOSERS.sample %>
+<br />
+<br />
+-Team Oatmel
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<%= link_to "Notification Settings", "#{ENV['ROOT_PATH']}notification_settings/#{@user.slug}" %>
+</p>

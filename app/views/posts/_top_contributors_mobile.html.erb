@@ -1,0 +1,7 @@
+<% @top_contributors.each do |user| %>
+	<a href="/profiles/<%= user.pretty_slug %>" style="color:#333;text-decoration:none;cursor:pointer;">
+		<span class="fade-in">
+			<div class="medium" style='background-image: url(<%= user.img %>); width:60px; height:60px; display:inline-block;'></div>
+		</span>
+	</a>
+<% end %>

@@ -1,0 +1,15 @@
+<%= OPENERS.sample %> <%= @user.first_name %>,
+===============================================
+You're on a roll! Thank you for posting some great stuff on Oatmel! Your account is now verified and will show a verified badge near your name for all reviews, posts, or comments you make! :)
+<%= "#{ENV['ROOT_PATH']}profiles/#{@user.pretty_slug}" %>
+===============================================
+<%= CLOSERS.sample %>
+-Team Oatmel
+
+
+
+
+
+
+Notification Settings: 
+<%= "#{ENV['ROOT_PATH']}notification_settings/#{@user.slug}" %>

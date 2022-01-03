@@ -1,0 +1,10 @@
+<% if @post %>
+	<meta property="og:url" content="<%= ENV['ROOT_PATH'] %>posts/<%= @post.pretty_slug %>">
+	<meta property="og:title" content="<%= @post.name %>">
+	<meta property="og:description" content="<%= @post.description %> | Oatmel">
+<% end %>
+<% if @product %>
+	<meta property="og:image" content="<%= @product.img_front_url %>">
+	<meta property="og:url" content="<%= ENV['ROOT_PATH'] %>products/<%= @product.pretty_slug %>">
+	<meta property="og:title" content="<%= @product.name %> | Oatmel">
+<% end %>

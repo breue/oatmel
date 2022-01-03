@@ -1,0 +1,16 @@
+<% @top_contributors.each do |user| %>
+	<div class="row" style="margin-bottom:10px;">
+		<div class="col-6">
+			<a href="/profiles/<%= user.pretty_slug %>" style="color:#333;text-decoration:none;cursor:pointer;">
+				<span class="fade-in">
+					<div class="medium" style='background-image: url(<%= user.img %>); width:60px; height:60px; display:inline-block;margin-bottom:-20px;'></div>
+				</span>
+				<div style="display:inline-block;margin-top:20px;margin-left:4px;"><strong><%= user.name %></strong><%= badge(user, 'small') %></div>
+			</a>
+		</div>
+		<div class="col-6">
+			<div style="margin-top:24px;">Posts <span class="badge badge-info"><%= user.post_count %></span></div>
+		</div>
+	</div>
+	<br />
+<% end %>

@@ -1,0 +1,64 @@
+<div class="container">
+  <h3>Notification Settings for <%= @user.name %></h3>
+<div style="margin-bottom:15px;">
+           Send me emails about:
+         </div>
+           <% if @user.unread_notifications_batch_emails %>
+           <input type="checkbox" id="unread_notifications" name="unread_notifications" value="unread_notifications" checked>
+           <% else %>
+           <input type="checkbox" id="unread_notifications" name="unread_notifications" value="unread_notifications">
+           <% end %>
+<label for="unread_notifications"> Unread notifications (once or twice a week)</label><br>
+<% if @user.featured_batch_emails %>
+<input type="checkbox" id="featured_notifications" name="featured_notifications" value="featured_notifications" checked>
+<% else %>
+<input type="checkbox" id="featured_notifications" name="featured_notifications" value="featured_notifications">
+<% end %>
+<label for="featured_notifications"> The product of the week (once a week)</label><br>
+           <br />
+
+           <div class="alert alert-warning" role="alert" id="status" style="display:none;">Settings updated!</div>
+</div>
+<script>
+function updateNotificationSettings(role, value) {
+    $.ajax({
+    url: '/update_notification_settings/' + '<%= @user.slug %>',
+    type: "POST",
+    dataType: "json",
+    data : {role: role,
+      value: value
+    },
+    success: function (data) {
+      if (data["status"] == "success") {
+        $("#status").show();
+            function hideStatus(){ 
+                $("#status").fadeOut();
+            };
+            setInterval(hideStatus, 4000);
+     };
+  }
+  });
+}
+$(document).ready(function() {
+    var selected_val = false;
+    $('#unread_notifications').change(function() {
+        if(this.checked) {
+            selected_val = true;
+        } else {
+          selected_val = false;
+        }
+        updateNotificationSettings('notifications', selected_val);      
+    });
+});
+$(document).ready(function() {
+    var selected_val = false;
+    $('#featured_notifications').change(function() {
+        if(this.checked) {
+            selected_val = true;
+        } else {
+          selected_val = false;
+        } 
+        updateNotificationSettings('featured', selected_val);         
+    });
+});
+</script>

@@ -1,0 +1,61 @@
+<!-- Modal -->
+<div class="modal fade" id="addPics" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="myModalLabel">Add a picture to <%= @product.name %></h3>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="loading_img" style="text-align:center;font-size:20px;display:none;">
+            <strong>One sec...</strong>
+            <br />
+            <%= image_tag "loading.gif", style: "width:100%;" %>
+          </div>
+          <div id="img_form_div">
+            <% @new_image = Image.new %>
+            <%= simple_form_for(@new_image, html: { multipart: true, id: "new_image"} ) do |f| %>
+              <%= hidden_field_tag 'product', @product.slug   %>
+              <div class="file-upload4" style="max-width:100%;max-height:100%;">
+              <strong>Do you have a better picture?</strong>
+              <br />
+              <span>Please try to make sure the picture is good quality.</span>
+              <div class="image-upload-wrap4" style="max-width:100%;max-height:100%;">
+              <input id="additional_pic" name="additional_pic" class="file-upload-input4" type='file' onchange="readURL4(this);" accept="image/*" />
+              <div class="drag-text4">
+              <h3>Drag and drop or click to select Image</h3>
+              </div>
+              </div>
+              <div class="file-upload-content4">
+              <img class="file-upload-image4" src="#" alt="your image" />
+              <div class="image-title-wrap4">
+              <button type="button" onclick="removeUpload4()" class="remove-image4">Remove <span class="image-title3">Uploaded Image</span></button>
+              </div>
+              </div>
+              </div>
+              <div id="image_error" style="display:none;">
+              <span style="color:red;">Please add a image.</span>
+              <br />
+              </div>
+              <button type="button" id="add_picture_completed" onClick="uploadPicture();" class="btn btn-info btn-block btn-lg" style="color:#fff;font-weight:700;">Upload</button>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function uploadPicture () {
+  var additional_pic = $("#additional_pic").val();
+  if (additional_pic.length > 1) {
+    $('#img_form_div').hide();
+    $('#loading_img').show();
+    $('form#new_image').submit(); 
+  } else {
+    $('#image_error').show(); 
+  }
+}
+</script>

@@ -1,0 +1,6 @@
+$('#praises-scroll4').append('<%= j render(:partial => "products/review", :collection => @reviews, :as => :review) %>');
+<% if @reviews.next_page %>
+  $('.pagination').replaceWith('<%= j will_paginate(@reviews) %>');
+<% else %>
+  $('.pagination').remove();
+<% end %>

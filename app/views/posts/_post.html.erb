@@ -1,0 +1,42 @@
+<div class="row">
+	<div class="col-md-1">
+		<a href="/profiles/<%= post.user.pretty_slug %>" style="text-decoration:none;color:#333;">
+			<span class="fade-in">
+				<div class="medium" style='background-image: url(<%= post.user.img %>); width:60px; height:60px; display:inline-block;'></div>
+		    </span>
+		</a>
+	</div>
+	<div class="col-md-6">
+		<% if params[:action] == "community"  %>
+			<a data-turbolinks-persist-scroll=true href="/posts/<%= post.pretty_slug %>" style="text-decoration:none;color:#333;">
+		<% else %>
+			<a href="/posts/<%= post.pretty_slug %>" style="text-decoration:none;color:#333;">
+		<% end %>
+
+		<a href="/posts/<%= post.pretty_slug %>" style="text-decoration:none;color:#333;">
+			<strong style="color:#17a2b8;"><%= post.name %></strong>
+			<br />
+			<small>by <strong><%= post.user.name %></strong> <%= badge(post.user, 'small') %></small>
+			<br />
+			<p>
+				<%= truncate(post.description, length: 120) %>
+			</p>
+			<div class="text-muted" style="margin-top:-10px;font-size:14px;">
+				<%= post.upvote_count %> Claps ● <%= post.comment_count %> Comments
+			</div>
+		</a>
+	</div>
+	<div class="col-md-4">
+		<div class="show_on_desktop">
+			<br />
+			<% post.get_participants["participants"].each do |participant| %>
+				<a href="/profiles/<%= participant['slug'] %>" style="cursor:pointer;text-decoration:none;">
+					<span class="fade-in">
+						<div class="medium" style='background-image: url(<%= participant['image_url'] %>); width:60px; height:60px; display:inline-block;'></div>
+				    </span>
+				</a>
+			<% end %>
+		</div>
+	</div>
+</div>
+<br /><br />

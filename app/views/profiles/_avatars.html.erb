@@ -1,0 +1,26 @@
+<!-- Modal -->
+<div class="modal fade" id="setAvatar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="myModalLabel">Pick an avatar</h3>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <% @avatars.each do |avatar| %>
+            <%= link_to "/select_avatar/#{avatar.slug}", style:"display:inline;text-decoration:none;", method: :post do %>
+                <span class="fade-in">
+                  <div class="medium" style='background-image: url(<%= avatar.img_url %>); width:90px; height:90px; display:inline-block;'></div>
+                </span>
+              <% end %>
+            <% end %>
+            <br />
+            <br />
+            <%= link_to "Reset avatar", "/remove_avatar", class:"btn btn-light", method: :post %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,4 @@
+# # config/schedule.yml
+# my_first_job:
+#   cron: "0 0 11 ? * SUN,FRI *" #it will retrieve data every 3 minutes
+#   class: "ScheduledBatchEmailer"

@@ -1,0 +1,54 @@
+<span style="float:right;">
+  <% review.rating.times do %>
+    <i class="fas fa-utensil-spoon" style="color:#6BCC00;"></i>
+  <% end %>
+ <strong><%= review.rating %></strong>
+ <% if @current_user %>
+    <% if @current_user.admin? %>
+    <br />
+      <%= link_to "/hide?role=Review&slug=#{review.slug}", method: :post, :data => {:confirm => 'Are you sure you want to ban this review?'}, style: "font-size:14px;color:#9B9B9B;float:right;" do %>
+        <i class="fas fa-flag"></i>
+      <% end %>
+    <% end %>
+  <% end %>
+</span>
+<div style="display:block;margin-top:-15px;margin-bottom:15px;">
+<span class="fade-in">
+  <a href="/profiles/<%= review.user.pretty_slug %>" style="color:#333;text-decoration:none;cursor:pointer;">
+  <div class="medium" style='background-image: url(<%= review.user.img %>); width:60px; height:60px; display:inline-block;margin-bottom:-20px;'></div>
+</a>
+</span>
+<div style="display:inline-block;margin-top:20px;"><strong><a href="/profiles/<%= review.user.pretty_slug %>" style="color:#333;text-decoration:none;cursor:pointer;"><%= review.user.name %></a> <%= badge(review.user, 'small') %></strong></div>
+</div>
+    <p><%= review.description %></p>
+    <div class="row">
+      <div class="col-6">
+        <% if review.helpful_count > 0 %>
+          <strong><span id="<%= review.slug %>"><%= review.helpful_count %></span> people found this review helpful.</strong>
+        <% end %>
+      </div>
+      <div class="col-6">
+        <div id="feedback_holder_<%= review.slug %>">
+        <% if @current_user %>
+          <% if @current_user != review.user %>
+          <% if @feedbacks_given.exclude?(review.id.to_i) %>
+            Was this helpful? 
+            <div class="show_on_mobile">
+              <br />
+            </div>
+            <a onClick="markHelpful('<%= review.slug %>', 1);" class="btn btn-light btm-sm" style="cursor:pointer">Yes</a>&nbsp;&nbsp;<a onClick="markHelpful('<%= review.slug %>', 0);" class="btn btn-light btm-sm" style="cursor:pointer">No</a>
+          <% end %>
+          <% end %>
+        <% else %>
+        Was this helpful? 
+        <div class="show_on_mobile">
+          <br />
+        </div>
+          <a data-toggle="modal" data-target="#promptAuth" class="btn btn-light btm-sm" style="cursor:pointer">Yes</a>&nbsp;&nbsp;<a data-toggle="modal" data-target="#promptAuth" class="btn btn-light btm-sm" style="cursor:pointer">No</a>
+        <% end %>
+        </div>
+        <span id="thank_<%= review.slug %>" style="display:none;">Thank you!</span>
+      </div>
+    </div>
+    <hr>
+    <br />

@@ -1,0 +1,98 @@
+<% if @current_user %>
+  <% if @current_user.admin? || !(@current_user.reviewed?(@product)) %>
+      <a data-toggle="modal" data-target="#newReview" id="reviewer_1" class="btn btn-warning btn-block" style="font-size:20px;color:#fff;cursor:pointer;">Write your review <i class="fas fa-utensil-spoon"></i></a>
+      <div class="row" style="margin-top:22px;" id="col_reviewer1">
+    <% else %>
+      <div class="row">
+    <% end %>
+  <% else %>
+    <a data-toggle="modal" data-target="#promptAuth" class="btn btn-warning btn-block" style="font-size:20px;color:#fff;cursor:pointer;">Write your review <i class="fas fa-utensil-spoon"></i></a>
+    <div class="row" style="margin-top:22px;">
+  <% end %>
+  <div class="col-6" style="padding-right:10px;">
+  <% if @product.pick_of_the_week %>
+    <div class="card" style="border:2px solid #FFC108;">
+  <% else %>
+    <div class="card">
+  <% end %>
+    <div class="card-block">
+      <div class="fade-in">
+    <a data-toggle="modal" data-target="#morePics" style="cursor:pointer;">
+      <%= image_tag "#{@product.img_front_url}", style: "width:100%;height:100%;", class: "pretty" %>
+    </a>
+    </div>
+    </div>
+    <% if @product.pick_of_the_week %>
+      <div class="alert alert-warning" role="alert" style="font-weight:bold;margin-bottom:0px;margin-top:0px;">
+      <i class="fas fa-medal"></i> Product of the week
+      </div>
+    <% end %>
+  </div>
+<% if @product.has_url? %>
+<br />
+<a href='<%= @product.tracking_url %>' class="btn btn-info btn-sm" target="_blank">Visit this product online</a>
+<% end %>
+<div style="display:block;margin-bottom:10px;margin-top:14px;">
+<a data-toggle="modal" data-target="#morePics" style="cursor:pointer;"><i class="fas fa-eye"></i> View nutrition info and more images</a>
+</div>
+<% if @current_user %>
+  <div>
+  <a data-toggle="modal" data-target="#addPics" style="cursor:pointer;"><i class="fas fa-plus-circle"></i> Add a picture</a>
+  </div>
+<% end %>
+</div>
+  <div class="col-6" style="padding-left:10px;">
+    <div class="card">
+    <div class="card-block">
+<% if @product.img_extra? || @images.size > 0 %>
+<% count = 1 %>
+  <div class="fade-in">
+    <a data-toggle="modal" data-target="#morePics" style="cursor:pointer;">
+<div id="imgCarousel2" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <% if @product.img_back? %>
+      <li data-target="#imgCarousel2" data-slide-to="0" class="active"></li>
+    <% end %>
+    <% if @product.img_extra? %>
+      <li data-target="#imgCarousel2" data-slide-to="1"></li>
+    <% end %>
+    <% @images.each do |image| %>
+        <% if image.img? %>
+        <% count += 1 %>
+          <li data-target="#imgCarousel2" data-slide-to="<%= count %>"></li>
+        <% end %>
+    <% end %>
+  </ol>
+  <div class="carousel-inner">
+     <% if @product.img_back? %>
+        <div class="carousel-item active">
+                <%= image_tag "#{@product.img_back_url}", style: "width:100%;height:100%;", class: "pretty" %>
+        </div>
+      <% end %>
+      <% if @product.img_extra? %>
+        <div class="carousel-item">
+                <%= image_tag "#{@product.img_extra_url}", style: "width:100%;height:100%;", class: "pretty" %>
+        </div>
+      <% end %>
+      <% @images.each do |image| %>
+      <% if image.img? %>
+        <div class="carousel-item">
+                <%= image_tag "#{image.img_url}", style: "width:100%;height:100%;", class: "pretty" %>
+        </div>
+      <% end %>
+      <% end %>
+  </div>
+</div>
+   </a>
+    </div>
+<% else %>
+      <div class="fade-in">
+        <a data-toggle="modal" data-target="#morePics" style="cursor:pointer;">
+          <%= image_tag "#{@product.img_back_url}", style: "width:100%;height:100%;", class: "pretty" %>
+        </a>
+    </div>
+<% end %>
+    </div>
+  </div>
+  </div>
+</div>

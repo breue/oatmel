@@ -1,0 +1,55 @@
+<div id="comment_section_<%= comment.slug %>" style="display:block;margin-left:30px;margin-top:10px;">
+<div class="row" style="margin-bottom:20px;">
+	<div class="col-1 col-md-auto" style="padding:0px;width:35px; ">
+		<div style="padding:0px;">
+				<a href="/profiles/<%= comment.user.pretty_slug %>">
+					<span class="fade-in">
+						<div class="medium" style='background-image: url(<%= comment.user.img %>); width:30px; height:30px; display:inline-block;margin-top:0px;margin-bottom:4px;'></div>
+					</span>
+				</a>
+		</div>
+	</div>
+	<div class="col-10" style="padding:10px;margin-bottom:10px;padding-top:0px;">
+<div class="diff_padding">
+	<div style="margin-bottom:0px;"><strong><%= comment.user.name %><%= badge(comment.user, 'small') %></strong></div>
+	<%= 
+	auto_link(simple_format(comment.description, class: 'description_comment'), html: { target: '_blank' }, :html => { :target => '_blank' }) do |text|
+	  truncate(text, :length => 50)
+	end
+	%>
+			<% if @current_user %>
+			<% if @current_user != comment.user %>
+			<% if @upvoted_comments.include?(comment.id.to_i) %>
+				<a id="upvote_<%= comment.slug %>" onClick="unVote('<%= comment.slug %>', 'Comment')" style="cursor:pointer;float:right;margin-left:15px;margin-top:-2px;">
+					<%= image_tag "/clap.png", style: "width:20px;", class: "clapper", id: "clapper_#{comment.slug}" %>
+				</a>
+			<% else %>
+				<a id="upvote_<%= comment.slug %>" onClick="upVote('<%= comment.slug %>', 'Comment')" style="cursor:pointer;float:right;margin-left:15px;margin-top:-2px;">
+					<%= image_tag "/clap2.png", style: "width:20px;", class: "clapper", id: "clapper_#{comment.slug}" %>
+				</a>
+			<% end %>
+			<% end %>
+			<% end %>
+   <% if @current_user %>
+    <% if @current_user.admin? %>
+      <%= link_to "/hide?role=Comment&slug=#{comment.slug}", method: :post, :data => {:confirm => 'Are you sure?'}, style: "font-size:14px;color:#9B9B9B;float:right;" do %>
+        <i class="fas fa-flag"></i>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% if @current_user %>
+	  <a onClick="$(this).hide();$('#reply_holder_<%= comment.slug %>').show();" style="cursor:pointer;color:#4990E2;font-size:11px;">Reply</a>
+  <% else %>
+	  <a data-toggle="modal" data-target="#promptAuth" style="cursor:pointer;color:#4990E2;font-size:11px;">Reply</a>
+  <% end %>
+  <div style="max-width:100%;max-height:100%;display:none;padding-top:4px;padding-bottom:10px;" id="reply_holder_<%= comment.slug %>">
+<div class="input text required main_comment" style="margin-bottom:6px;"><textarea class="text required form-control" cols="5" id="reply_<%= comment.slug %>" required="required" aria-required="true" placeholder="Enter your comment here" name="main_comment"></textarea></div>
+<button onclick="addReply('<%= comment.slug %>')" name="button" class="btn btn-dark btn-sm">
+    Reply
+</button>
+</div>
+</div>
+</div>
+</div>
+  <%= render partial: "comment", collection: comment.replies %>
+</div>

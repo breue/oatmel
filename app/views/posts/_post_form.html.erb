@@ -1,0 +1,56 @@
+<!-- Modal -->
+<div class="modal fade" id="newPost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="vertical-alignment-helper">
+    <div class="modal-dialog vertical-align-center">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="myModalLabel">New Post</h3>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <% @new_post = Post.new %>
+            <br />
+            <%= simple_form_for(@new_post, html: { multipart: true, id: "new_post"} ) do |f| %>
+              <strong>Title</strong>
+              <%= f.input :name, as: :string, :input_html => { :class => "form-control", id: "post_name"},required: true, label: false, placeholder: "Post title"%>
+              <br />
+              <strong>Topic</strong>
+              <%= f.input :category_name, as: :string, :input_html => { :class => "form-control", id: "category_posts", autocomplete: "off"},required: true, label: false, placeholder: "What is this post about?" %>
+              <br />
+              <strong>Text</strong>
+              <%= f.input :description, as: :text, :input_html => { :class => "form-control", :rows => 4, id: "description_post"}, required: true, label: false, placeholder: "Post description" %>
+              <br />
+              <div id="post_form_error" style="display:none;">
+              <span style="color:red;">Please fill in a title, topic, and the post text.</span>
+              <br />
+            </div>
+              <a id="submit_post" onClick="completePost();" class="btn-info btn-block btn-lg" style="cursor:pointer;color:#fff;font-weight:bold;text-align:center;">
+                 Post
+              </a>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var categories_post = <%= raw @categories %>;
+autocomplete(document.getElementById("category_posts"), categories_post);
+</script>
+<script>
+function completePost () {
+  var post_title = $("#post_name").val();
+  var post_topic = $("#category_posts").val();
+  var post_text = $("#description_post").val();
+  if (post_title.length > 1 && post_topic.length > 1 && post_text.length > 1) {
+    $("#submit_post").attr('value', 'One sec...');
+    $("#submit_post").attr('disabled', 'true');
+    $('#post_form_error').hide();
+    $('form#new_post').submit();
+  } else {
+    $('#post_form_error').show(); 
+  }
+}
+</script>
